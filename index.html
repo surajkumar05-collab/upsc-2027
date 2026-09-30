@@ -1090,13 +1090,18 @@ function setAccountUI(name){const chip=document.getElementById('accountChip'),bt
 function logout(){localStorage.removeItem(SESSION_KEY);const chip=document.getElementById('accountChip'),btn=document.getElementById('accountButton');if(chip)chip.textContent='👤 Guest Mode';if(btn){btn.textContent='🔐 Login / Sign up';btn.onclick=openAuth}}
 function restoreSession(){const key=localStorage.getItem(SESSION_KEY),a=getAccounts();if(key&&a[key])setAccountUI(a[key].username);updateSeatUI()}
 document.addEventListener('DOMContentLoaded',restoreSession);
-</script><script type="module">
-  // Import the functions you need from the SDKs you need
+ </script>
+ <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyBxo337K1k1MJpXZFwIvfWyoe_o2E2D0g0",
     authDomain: "upsc-cse-2027-mission-ias.firebaseapp.com",
@@ -1106,8 +1111,58 @@ document.addEventListener('DOMContentLoaded',restoreSession);
     appId: "1:464530722165:web:a75ca0276ead40ff4ed73c"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-</script>
+  const auth = getAuth(app);
+
+  window.firebaseAuth = auth;
+
+  window.firebaseCreateAccount = async function(username, password) {
+    const email = username.includes("@")
+      ? username
+      : username.toLowerCase() + "@missionias.local";
+
+    return await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+  };
+
+  window.firebaseLogin = async function(username, password) {
+    const email = username.includes("@")
+      ? username
+      : username.toLowerCase() + "@missionias.local";
+
+    return await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+  };
+
+  window.firebaseLogout = async function() {
+    await signOut(auth);
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const username =
+        user.email?.split("@")[0] || "User";
+
+      localStorage.setItem(
+        "missionIAS_session_v1",
+        username
+      );
+
+      if (typeof setAccountUI === "function") {
+        setAccountUI(username);
+      }
+    } else {
+      localStorage.removeItem(
+        "missionIAS_session_v1"
+      );
+    }
+  });
+ </script>
 </body>
 </html>
