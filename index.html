@@ -1090,6 +1090,24 @@ function setAccountUI(name){const chip=document.getElementById('accountChip'),bt
 function logout(){localStorage.removeItem(SESSION_KEY);const chip=document.getElementById('accountChip'),btn=document.getElementById('accountButton');if(chip)chip.textContent='👤 Guest Mode';if(btn){btn.textContent='🔐 Login / Sign up';btn.onclick=openAuth}}
 function restoreSession(){const key=localStorage.getItem(SESSION_KEY),a=getAccounts();if(key&&a[key])setAccountUI(a[key].username);updateSeatUI()}
 document.addEventListener('DOMContentLoaded',restoreSession);
+</script><script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBxo337K1k1MJpXZFwIvfWyoe_o2E2D0g0",
+    authDomain: "upsc-cse-2027-mission-ias.firebaseapp.com",
+    projectId: "upsc-cse-2027-mission-ias",
+    storageBucket: "upsc-cse-2027-mission-ias.firebasestorage.app",
+    messagingSenderId: "464530722165",
+    appId: "1:464530722165:web:a75ca0276ead40ff4ed73c"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
 </script>
 </body>
 </html>
